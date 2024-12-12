@@ -1,0 +1,1424 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content=".">
+      
+      
+      
+      
+      
+      <link rel="icon" href="assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+    
+    
+      
+        <title>Transformer Decoder Architecture</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/extra.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#decoder-only-transformer-architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="Transformer Decoder Architecture" class="md-header__button md-logo" aria-label="Transformer Decoder Architecture" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Transformer Decoder Architecture
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="Transformer Decoder Architecture" class="md-nav__button md-logo" aria-label="Transformer Decoder Architecture" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Transformer Decoder Architecture
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Introduction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Architecture Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-input-tokens-embedding-and-positional-encoding" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Input Tokens, Embedding, and Positional Encoding
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Input Tokens, Embedding, and Positional Encoding">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-decoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Decoder:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Decoder:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-masked-multi-head-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1. Masked Multi-Head Attention
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42-norm-add-pre-norm" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2. Norm &amp; Add (Pre-norm)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43-feed-forward-neural-network-ffnn" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.3 Feed-Forward Neural Network (FFNN)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example:
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44-norm-add-pre-norm" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.4 Norm &amp; Add (Pre-Norm)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#45-full-decoder-block" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.5. Full Decoder Block:
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-linear-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Linear Layer
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example:
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Example:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#6-training-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Training Pipeline
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#61-flattening-cross-entropy-loss-backpropagation" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1. Flattening, Cross-Entropy Loss, Backpropagation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example:
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gradient-computation-backpropagation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gradient Computation (Backpropagation):
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#weight-update-optimizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Weight Update (Optimizer):
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Weight Update (Optimizer):">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#62-learnable-weights-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2. Learnable Weights Update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-loss-computation-during-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.3. Loss Computation During Training
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-inference-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Inference Pipeline
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Inference Pipeline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-input-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.1. Input Preparation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-autoregressive-token-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.2. Autoregressive Token Prediction
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-iterative-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.3. Iterative Process
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-iterative-token-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: Iterative Token Generation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-additionals-vanishing-gradients-exploding-gradients-and-regularization-techniques" class="md-nav__link">
+    <span class="md-ellipsis">
+      10. Additionals: Vanishing Gradients, Exploding Gradients, and Regularization Techniques
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. References:
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="decoder-only-transformer-architecture">Decoder-Only Transformer Architecture</h1>
+<h3 id="table-of-contents"><strong>Table of Contents</strong></h3>
+<ol>
+<li><strong>Introduction</strong>  </li>
+<li><strong>Architecture Overview</strong>  </li>
+<li><strong>Input Tokens, Embedding, and Positional Encoding</strong>  </li>
+<li><strong>Decoder Model</strong>  <ul>
+<li><strong>4.1. Masked Multi-Head Attention</strong>  </li>
+<li><strong>4.2. Add &amp; Norm</strong>  </li>
+<li><strong>4.3. Feed-Forward Neural Network (FFNN)</strong>  </li>
+<li><strong>4.4. Add &amp; Norm</strong>  </li>
+<li><strong>4.5. Full Decoder Block</strong>  </li>
+</ul>
+</li>
+<li><strong>Linear Layer</strong>  </li>
+<li><strong>Training Pipeline</strong>  <ul>
+<li><strong>6.1. Flattening and Loss Computation</strong>  </li>
+<li><strong>6.2. Updating Learnable Weights</strong>  </li>
+<li><strong>6.3. Loss Computation During Training</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>Inference Pipeline</strong>  </p>
+<ul>
+<li><strong>7.1. Input Preparation</strong>  </li>
+<li><strong>7.2. Autoregressive Token Prediction</strong>  </li>
+<li><strong>7.3. Iterative Process</strong>  </li>
+</ul>
+</li>
+<li>
+<p><strong>Additionals: Vanishing gradients and regularization techniques</strong></p>
+</li>
+<li><strong>References</strong></li>
+</ol>
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="1-introduction"><strong>1. Introduction</strong></h3>
+<p>The goal of this readme is to describe in details the Transformer Decoder Architecture. We will be presenting all the different layers and illustrating each step using a dummy example. </p>
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="2-architecture-overview"><strong>2. Architecture Overview</strong></h3>
+<p>The Decoder only architecture contains multiple concepts, that we will see in detail. To begin, we will lay the general overview of the pipeline, mentionning all the core components. </p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/architecture_overview/architecture.png" alt="Architecture Overview" width="30%">
+</div>
+
+<p><strong>The Decoder architecture is built upon many different components, namely (and in order):</strong></p>
+<ul>
+<li><strong>Input Tokens</strong> These represent the <strong>tokens</strong> processed by the model. During <strong>training</strong>, they are batches of input sequences from the dataset. During <strong>inference</strong>, they refer to the input text provided to the model.</li>
+<li><strong>Input Embeddings</strong> Tokens are mapped to dense vector rpz. using an embedding matrix, <strong>capturing semantic relationships.</strong></li>
+<li><strong>Positional Encoding</strong> is added to the embeddings, enabling the model to understand the <strong>order of tokens in a sequence</strong>.</li>
+<li><strong>Decoder block</strong><ul>
+<li><strong>Masked Multi-Head Attention</strong> Computes attention scores to capture <strong>contextual relationships between tokens</strong>. Masking ensures that the model only considers past and current tokens during training.</li>
+<li><strong>Norm and Add</strong> Layer normalization first, followed by a residual connection to stabilize training and improve gradient flow.</li>
+<li><strong>Feed Forward Neural Network</strong> Fully connected network with a <strong>non-linear activation</strong> for learning complex relationships.</li>
+<li><strong>Add &amp; Norm</strong> Layer normalization first, followed by a residual connection after the feed-forward network.</li>
+</ul>
+</li>
+<li><strong>Linear Layer</strong> Projects the output matrix from the decoder block to a space matching the vocabulary size, <strong>producing logits</strong>.</li>
+<li><strong>Softmax</strong> Converts logits into <strong>probabilities</strong>, representing the likelihood of each token in the vocabulary.</li>
+<li><strong>Output probabilities</strong> The probabilities of tokens in the sequence generated by the model.</li>
+</ul>
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="3-input-tokens-embedding-and-positional-encoding"><strong>3. Input Tokens, Embedding, and Positional Encoding</strong></h3>
+<p>The first step of the model begins with processing the input tokens, also called tokenization.</p>
+<ul>
+<li>
+<p><strong>Input Tokens:</strong>
+Tokenization consists of splitting text into smaller units or tokens. There exist various strategies, such as character-level tokenization, word-level tokenization, subword tokenization (like <a href="https://platform.openai.com/tokenizer">Open AI models</a> using with Byte Pair Encoding). This allows to create a vocabulary, containing <strong>all unique tokens which are mapped to unique IDs.</strong></p>
+</li>
+<li>
+<p><strong>Input Embedding Matrix:</strong>
+The tokens are then mapped to a dense vector representation, also called the <strong>embedding matrix</strong>. This matrix is learnable and is optimized during training through backpropagation.  It is of shape <code>(vocab_size, n_embed)</code>, where <code>vocab_size</code> is the total number of tokens in the vocabulary and <code>n_embed</code> is the embedding dimension. This matrix is essential for the Decoder as it allows to capture <strong>semantic relationships between tokens.</strong> </p>
+</li>
+<li>
+<p><strong>Positional Encoding Matrix:</strong> 
+Positional Encoding is added to the token embeddings to provide the model with <strong>information about token positions in the sequence.</strong> It is of shape <code>(block_size, n_embed)</code>, where <code>block_size</code> is the sequence length and <code>n_embed</code> is the embedding dimension. One important note is that the positional encoding ensures that tokens at the same positions in different sequences receive the same positional embedding, as it is only based on their position within the sequence. Finally, this positional encoding, unlike the one used in the original <a href="https://arxiv.org/pdf/1706.03762">Transformer paper</a>, is based on learned embeddings, which is also optimized during training. </p>
+</li>
+<li>
+<p><strong>Combined Input Matrix:</strong>
+The <strong>Input Embedding Matrix</strong> and <strong>Positional Embedding Matrix</strong> are added together to form the <strong>input matrix</strong> for the model, allowing both semantic and positional information to be incorporated.</p>
+</li>
+</ul>
+<div style="border-top: 2px solid #00611a; margin: 10px 0;"></div>
+
+<h4 id="example"><strong>Example:</strong></h4>
+<p>For the following explanation, we use this example dataset:  </p>
+<ul>
+<li><strong>Input Dataset:</strong> <code>"dog jumps around cat man is helping cat"</code>  </li>
+<li><strong>Tokenization:</strong> <code>["dog", "jumps", "around", "cat", "man", "is", "helping", "cat"]</code>  </li>
+<li><strong>Unique IDs:</strong> <code>{"cat": 0, "dog": 1, "jumps": 2, "around": 3, "man": 4, "is": 5, "helping": 6}</code>  </li>
+<li><strong>Vocabulary Size (<code>vocab_size</code>)</strong>: <code>7</code>  </li>
+<li><strong>Embedding Dimension (<code>C</code>)</strong>: <code>6</code>  </li>
+<li><strong>Block Size (<code>T</code>)</strong>: <code>4</code>  </li>
+<li><strong>Batch Size (<code>B</code>)</strong>: <code>2</code>  </li>
+</ul>
+<hr />
+<p><strong>1. Input Representation:</strong></p>
+<p>The model's input is a tensor of shape <code>(B, T) = (2, 4)</code>, as depicted on the image:</p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/input_tokens_embeddings_positional_encodings/input_vector.png" alt="Architecture Overview" width="100%">
+</div>
+
+<p><strong>2. Embedding Tables:</strong></p>
+<ul>
+<li><strong>Token Embedding Table</strong>: Shape <code>(vocab_size, n_embed) = (7, 6)</code>  </li>
+<li><strong>Positional Embedding Table</strong>: Shape <code>(block_size, n_embed) = (4, 6)</code>  </li>
+</ul>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/input_tokens_embeddings_positional_encodings/emb_tables.png" alt="Architecture Overview" width="100%">
+</div>
+
+<p><strong>3. Embedding Process:</strong></p>
+<ol>
+<li><strong>Input Embedding Matrix (<code>tok_emb</code>)</strong>: Maps the input tokens <code>(B, T)</code> to a dense matrix of shape <code>(B, T, C) = (2, 4, 6)</code>.  </li>
+<li><strong>Final Input Matrix (<code>x</code>)</strong>: The positional encoding matrix <code>(4, 6)</code> is added (via broadcasting) to the token embedding matrix, resulting in a final shape of <code>(B, T, C) = (2, 4, 6)</code>.</li>
+</ol>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/input_tokens_embeddings_positional_encodings/emb_matrix.png" alt="Architecture Overview" width="100%">
+</div>
+
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="4-decoder"><strong>4. Decoder:</strong></h3>
+<h4 id="41-masked-multi-head-attention"><strong>4.1. Masked Multi-Head Attention</strong></h4>
+<p>Multi-Head Attention consists of <strong>multiple attention "heads"</strong> each processing the input <strong>independently</strong> to capture <strong>different aspects of relationships</strong> between tokens (e.g., semantic, syntactic). Each head operates in <strong>parallel</strong>, enabling the model to simultaneously attend various parts of the input sequence. The results from all heads are concatenated and transformed into a single output. However, more heads are not always better; their effectiveness depends on the model's capacity (embedding dimensions per head) and the complexity of the task.</p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/multi_head/multi_head_overview.png" alt="Multi-Head Attention Overview" width="100%">
+</div>
+
+<hr />
+<p><strong>1. Key Components</strong></p>
+<p>Each attention head computes <strong>attention scores</strong> using <strong>three vectors</strong> derived from the input:</p>
+<ul>
+<li><strong>Query (<code>Q</code>)</strong>: <strong>Represents the token</strong> currently being processed.</li>
+<li><strong>Key (<code>K</code>)</strong>: Acts as a <strong>label for other tokens</strong> in the sequence.</li>
+<li><strong>Value (<code>V</code>)</strong>: <strong>Encodes the actual information</strong> of each token.</li>
+</ul>
+<hr />
+<p>These vectors are generated by applying separate <strong>linear transformations with learned weights</strong>:</p>
+<div class="arithmatex">
+<div class="MathJax_Preview">
+Q = XW_Q, \quad K = XW_K, \quad V = XW_V
+</div>
+<script type="math/tex; mode=display">
+Q = XW_Q, \quad K = XW_K, \quad V = XW_V
+</script>
+</div>
+<ul>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview"> X </span><script type="math/tex"> X </script></span>:</strong> The input embeddings of shape <span class="arithmatex"><span class="MathJax_Preview">(B, T,C)</span><script type="math/tex">(B, T,C)</script></span></li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview"> W_Q, W_K, W_V </span><script type="math/tex"> W_Q, W_K, W_V </script></span>:</strong> Learnable weight matrices of shapes <span class="arithmatex"><span class="MathJax_Preview">(C, d_k)</span><script type="math/tex">(C, d_k)</script></span>, <span class="arithmatex"><span class="MathJax_Preview">(C, d_k)</span><script type="math/tex">(C, d_k)</script></span>, and <span class="arithmatex"><span class="MathJax_Preview">(C, d_v)</span><script type="math/tex">(C, d_v)</script></span>, respectively, used to project the input embeddings into Query, Key, and Value vectors. (in_features, out_features)</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> In PyTorch, weight matrices like <span class="arithmatex"><span class="MathJax_Preview"> W_Q, W_K, W_V </span><script type="math/tex"> W_Q, W_K, W_V </script></span> are defined in the shape <span class="arithmatex"><span class="MathJax_Preview">(\text{out_features}, \text{in_features})</span><script type="math/tex">(\text{out_features}, \text{in_features})</script></span>. During computation, the transpose is applied implicitly, making the operation <span class="arithmatex"><span class="MathJax_Preview"> Q = XW_Q </span><script type="math/tex"> Q = XW_Q </script></span> mathematically equivalent to <span class="arithmatex"><span class="MathJax_Preview"> Q = XW_Q^T </span><script type="math/tex"> Q = XW_Q^T </script></span>, without requiring an explicit transpose. </p>
+</blockquote>
+<hr />
+<p><strong>2. Attention Score Calculation</strong></p>
+<p>Determines how much focus each token should have on others in the sequence using the <strong>Scaled Dot-Product Attention</strong> formula:
+$$
+\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+$$</p>
+<ul>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">QK^T</span><script type="math/tex">QK^T</script></span></strong>: Computes the <strong>similarity between the Query and Key</strong> vectors (dot product).</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">\sqrt{d_k}</span><script type="math/tex">\sqrt{d_k}</script></span></strong>: A scaling factor to stabilize the attention scores where <span class="arithmatex"><span class="MathJax_Preview">d_k = \frac{n_{\text{embed}}}{\text{num_heads}}</span><script type="math/tex">d_k = \frac{n_{\text{embed}}}{\text{num_heads}}</script></span>.</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">\text{softmax}</span><script type="math/tex">\text{softmax}</script></span></strong>: Normalizes the attention scores into probabilities.  </li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">V</span><script type="math/tex">V</script></span></strong>: Represents the values aggregated using the attention probabilities.</li>
+</ul>
+<hr />
+<p><strong>3. Masking in the Decoder</strong></p>
+<p>To ensure causal (sequential) behavior, <strong>masking</strong> is applied in the decoder:</p>
+<ul>
+<li><strong>Why Masking?</strong>  During token prediction, the decoder must not "peek" at future tokens or the rest of the target sequence. Masking ensures only previous and current tokens are visible.</li>
+<li><strong>How Masking Works:</strong>  <ul>
+<li>A mask is applied to the attention scores before the softmax step.</li>
+<li>Masked positions are set to <span class="arithmatex"><span class="MathJax_Preview">-\infty</span><script type="math/tex">-\infty</script></span>, forcing their softmax values to be zero.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<p><strong>4. Final Output:</strong></p>
+<p>Each attention head produces an output of shape <code>(B, T, d_k)</code>. Outputs from all heads are concatenated into a single matrix and passed through a linear layer to produce the final output of shape <code>(B, T, C)</code>, where <code>C</code> is the model's embedding size.</p>
+<div style="border-top: 2px solid #00611a; margin: 10px 0;"></div>
+
+<h4 id="example_1"><strong>Example:</strong></h4>
+<p>Using the previous example with the following parameters:  </p>
+<ul>
+<li><strong>Batch size</strong> <code>B = 2</code>   </li>
+<li><strong>Block size</strong> <code>T = 4</code>  </li>
+<li><strong>Embedding dimension</strong> <code>C = 6</code>  </li>
+<li><strong>Number of heads</strong> = <code>3</code>  </li>
+</ul>
+<p>For simplicity, we omit the <span class="arithmatex"><span class="MathJax_Preview">\sqrt{d_k}</span><script type="math/tex">\sqrt{d_k}</script></span> scaling factor.</p>
+<p><strong>Step-by-Step Process:</strong></p>
+<ol>
+<li>
+<p><strong>Input Dimensions</strong>:  Input embeddings have shape <code>(B, T, C) = (2, 4, 6)</code>.  </p>
+</li>
+<li>
+<p><strong>Query, Key, and Value Matrices</strong>  </p>
+<ul>
+<li>Three linear transformations produce <code>Q</code>, <code>K</code>, and <code>V</code>.</li>
+<li>Each matrix has shape <code>(B, T, h_s) = (2, 4, 2)</code>, where <code>h_s</code> (head size) is <code>C</code> divided by the number of heads: <code>6/3 = 2</code>.</li>
+<li>Weight matrices for <code>Q</code>, <code>K</code>, and <code>V</code> are of shape <code>(h_s, C)</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Attention Score Computation</strong>  </p>
+<ul>
+<li>Compute the dot product of <code>Q</code> and <code>K^T</code>, resulting in the <strong>attention score matrix</strong> <code>wei</code> of shape <code>(B, T, T) = (2, 4, 4)</code>.</li>
+<li>Apply masking and softmax to normalize the scores.</li>
+</ul>
+</li>
+<li>
+<p><strong>Attention Output</strong>  </p>
+<ul>
+<li>Multiply the attention scores with <code>V</code>, yielding an output matrix for each head of shape <code>(B, T, h_s) = (2, 4, 2)</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Head Concatenation</strong>  </p>
+<ul>
+<li>Concatenate the outputs from all 3 heads to form a single matrix of shape <code>(B, T, C) = (2, 4, 6)</code>.</li>
+</ul>
+</li>
+</ol>
+<p>This final matrix is the output of the masked multi-head attention layer. This is illustrated in the following image:</p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/multi_head/multi_head.png" alt="Multi-Head Attention Overview" width="100%">
+</div>
+
+<p><strong>Simplified Example:</strong></p>
+<p>We start with the input matrix <code>(B, T, C) = (2, 4, 6)</code>. To focus on a single sequence, we reduce it to <code>(T, C) = (4, 6)</code>. For simplicity, we further reduce the embedding dimension to <code>C = 2</code>, giving <code>(T, C) = (4, 2)</code>. The head size is set to <code>h_s = 2</code>.</p>
+<p><strong>Disclaimer:</strong> This process is applied simultaneously across all sequences in the batch, but this illustration focuses on what happens for a single sequence for clarity. In practice, it operates on all sequences independently within the batch.</p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/multi_head/simplified.png" alt="Multi-Head Attention Overview" width="90%">
+</div>
+
+<hr />
+<ol>
+<li>
+<p><strong>Query Matrix (<code>Q</code>)</strong>:  </p>
+<ul>
+<li>Input <code>X</code>: <code>(T, C) = (4, 2)</code>, Weight <code>W_Q</code>: <code>(C, h_s) = (2, 2)</code>  </li>
+<li>Result: <code>Q = (T, h_s) = (4, 2)</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Key Matrix (<code>K</code>)</strong>:  </p>
+<ul>
+<li>Weight <code>W_K</code>: <code>(C, h_s) = (2, 2)</code>  </li>
+<li>Result: <code>K = (T, h_s) = (4, 2)</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Attention Scores</strong>:  </p>
+<ul>
+<li><code>Q</code>: <code>(T, h_s) = (4, 2)</code>, <code>K^T</code>: <code>(h_s, T) = (2, 4)</code>  </li>
+<li>Result: <code>QK^T = (T, T) = (4, 4)</code>  </li>
+<li>Each token in the query is evaluated against all tokens in the key (which act as labels) to compute attention scores.</li>
+</ul>
+</li>
+<li>
+<p><strong>Softmax</strong>:  </p>
+<ul>
+<li>Apply softmax to normalize <code>QK^T</code>, keeping the shape: <code>(T, T) = (4, 4)</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Value Matrix (<code>V</code>)</strong>:  </p>
+<ul>
+<li>Weight <code>W_V</code>: <code>(C, h_s) = (2, 2)</code>  </li>
+<li>Result: <code>V = (T, h_s) = (4, 2)</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Contextualized Output</strong>:  </p>
+<ul>
+<li>Multiply attention scores with <code>V</code>:  <code>(T, T) \cdot (T, h_s) = (4, 4) \cdot (4, 2)</code>  </li>
+<li>Result: <code>Output = (T, h_s) = (4, 2)</code>  </li>
+<li>The attention scores are used to aggregate values <span class="arithmatex"><span class="MathJax_Preview"> V </span><script type="math/tex"> V </script></span>, producing the final contextualized embeddings.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<p><strong>Final Output:</strong> The final contextualized embedding for the sequence has shape: <code>(T, h_s) = (4, 2)</code>.  </p>
+<p>This process computes how much focus each token in the sequence should give to every other token, combining the values <span class="arithmatex"><span class="MathJax_Preview"> V </span><script type="math/tex"> V </script></span> weighted by the attention scores to produce the output.</p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/multi_head/attention.png" alt="Multi-Head Attention Overview" width="100%">
+</div>
+
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="42-norm-add-pre-norm"><strong>4.2. Norm &amp; Add (Pre-norm)</strong></h3>
+<p><strong>Norm &amp; Add</strong> is an essential step in the Transformer Decoder architecture, combining layer normalization and residual connections to stabilize and enhance the training process. Here, <strong>Layer Normalization</strong> is applied <strong>before</strong> the sublayer, independently to each token embedding across its feature dimensions.</p>
+<hr />
+<p><strong>Key Steps:</strong></p>
+<ol>
+<li>
+<p><strong>Layer Normalization (Norm):</strong></p>
+<ul>
+<li>The input to the <strong>Masked Multi-Head Attention</strong> (or Feed-Forward Network in subsequent steps) is <strong>normalized first</strong>.  </li>
+<li>This step ensures stability by normalizing the intermediate activations across the feature dimensions to have a consistent mean and variance.</li>
+</ul>
+</li>
+<li>
+<p><strong>Residual Connection (Add):</strong></p>
+<ul>
+<li>The output of the sublayer (e.g., Masked Multi-Head Attention or Feed-Forward Network) is <strong>added</strong> to the input of the respective layer (e.g., input embeddings or intermediate outputs).  </li>
+<li>This "shortcut" helps retain original input information, improves gradient flow, and mitigates issues like vanishing gradients.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<p><strong>Why Norm &amp; Add?</strong></p>
+<ol>
+<li>
+<p><strong>Normalization Benefits:</strong></p>
+<ul>
+<li>Prevents instability caused by <strong>vanishing or exploding gradients</strong>.</li>
+<li>Stabilizes training by keeping activations consistent across layers.</li>
+</ul>
+</li>
+<li>
+<p><strong>Residual Connection Benefits:</strong></p>
+<ul>
+<li>Preserves the input information for better gradient flow.  </li>
+<li>Allows the model to build upon previously learned features without discarding them.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<blockquote>
+<p>Note: While <strong>post-norm</strong> (Add &amp; Norm) is another approach where normalization is applied after the sublayer, <strong>pre-norm</strong> (Norm &amp; Add) is typically used in decoder models as it ensures better gradient flow and training stability, especially in deep architectures.</p>
+</blockquote>
+<hr />
+<p><strong>Layer Normalization</strong></p>
+<p>The layer normalization is applied for each token independently across its embedding dimensions. This is achieved using the following formula:</p>
+<div class="arithmatex">
+<div class="MathJax_Preview">
+Norm(x) = \frac{x - \mathbb{E}[x]}{\sqrt{\text{Var}[x] + \epsilon}} \cdot \gamma + \beta
+</div>
+<script type="math/tex; mode=display">
+Norm(x) = \frac{x - \mathbb{E}[x]}{\sqrt{\text{Var}[x] + \epsilon}} \cdot \gamma + \beta
+</script>
+</div>
+<ul>
+<li><strong><code>x</code></strong>: Original activation values.  </li>
+<li><strong><code>E[x]</code></strong>: Mean of the activations, computed across the embedding dimensions.  </li>
+<li><strong><code>Var[x]</code></strong>: Variance of the activations.  </li>
+<li><strong><code>ε</code></strong>: A small constant to prevent division by zero.  </li>
+<li><strong><code>γ</code></strong>: Learnable scaling parameter (initialized to 1).  </li>
+<li><strong><code>β</code></strong>: Learnable bias parameter (initialized to 0).  </li>
+</ul>
+<p>This process ensures that the normalized activations have a mean of 0 and a standard deviation of 1. The learnable parameters <span class="arithmatex"><span class="MathJax_Preview">\gamma</span><script type="math/tex">\gamma</script></span> and <span class="arithmatex"><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span> provide flexibility, allowing the model to scale and shift the normalized values to better fit the task during training.</p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/normalization/layer_norm.png" alt="Multi-Head Attention Overview" width="100%">
+</div>
+
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="43-feed-forward-neural-network-ffnn"><strong>4.3 Feed-Forward Neural Network (FFNN)</strong></h3>
+<p>The <strong>Feed-Forward Neural Network (FFNN)</strong> applies a pointwise transformation independently to each token's embedding dimension (much like in Linear Normalization) It processes each token vector through a small neural network comprising <strong>two linear layers</strong> separated by a <strong>non-linear activation function</strong>.</p>
+<hr />
+<ol>
+<li>
+<p><strong>Input Dimensions</strong>:  input <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, C)</span><script type="math/tex">(B, T, C)</script></span></strong></p>
+</li>
+<li>
+<p><strong>First Linear Layer</strong>:  </p>
+<ul>
+<li>Maps the input vectors (<strong><span class="arithmatex"><span class="MathJax_Preview">C</span><script type="math/tex">C</script></span>-dimensional</strong>) to a higher-dimensional space (<strong><span class="arithmatex"><span class="MathJax_Preview">D = 4C</span><script type="math/tex">D = 4C</script></span></strong>).  </li>
+<li>The transformation is defined as:
+ $$
+ \text{Output}_1 = X W_1 + b_1
+ $$</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">W_1</span><script type="math/tex">W_1</script></span></strong>: Weight matrix of shape <strong><span class="arithmatex"><span class="MathJax_Preview">(C, D)</span><script type="math/tex">(C, D)</script></span></strong>.  </li>
+<li>Resulting output: <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, D)</span><script type="math/tex">(B, T, D)</script></span></strong>.  </li>
+</ul>
+</li>
+<li>
+<p><strong>Non-Linear Activation</strong>:  </p>
+<ul>
+<li>Applies a non-linear activation function (ReLU):
+ $$
+ \text{Activated Output} = \text{ReLU}(\text{Output}_1)
+ $$</li>
+</ul>
+</li>
+<li>
+<p><strong>Second Linear Layer</strong>:  </p>
+<ul>
+<li>Reduces the dimensionality back to <strong><span class="arithmatex"><span class="MathJax_Preview">C</span><script type="math/tex">C</script></span></strong>:
+ $$
+ \text{Output}_2 = \text{Activated Output} W_2 + b_2
+ $$</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">W_2</span><script type="math/tex">W_2</script></span></strong>: Weight matrix of shape <strong><span class="arithmatex"><span class="MathJax_Preview">(D, C)</span><script type="math/tex">(D, C)</script></span></strong>.  </li>
+<li>Resulting output: <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, C)</span><script type="math/tex">(B, T, C)</script></span></strong>.  </li>
+</ul>
+</li>
+<li>
+<p><strong>Dropout</strong>:  </p>
+<ul>
+<li>A dropout layer is applied to the output of the second linear layer to regularize the model and prevent overfitting.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Advantages of FFNN:</strong></p>
+<ul>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">D = 4C</span><script type="math/tex">D = 4C</script></span></strong> ensures the model captures richer, <strong>more complex representations</strong>.  </li>
+<li><strong>Dropout</strong> improves <strong>generalization</strong> during training.</li>
+</ul>
+<div style="border-top: 2px solid #00611a; margin: 10px 0;"></div>
+
+<h3 id="example_2"><strong>Example:</strong></h3>
+<ol>
+<li>Input shape: <span class="arithmatex"><span class="MathJax_Preview"> (B, T, C) = (1, 4, 6) </span><script type="math/tex"> (B, T, C) = (1, 4, 6) </script></span>.  </li>
+<li>The first linear layer (hidden) expands to <span class="arithmatex"><span class="MathJax_Preview"> (1, 4, 4C) = (1, 4, 24) </span><script type="math/tex"> (1, 4, 4C) = (1, 4, 24) </script></span>.  </li>
+<li>Apply ReLU activation.  </li>
+<li>The second linear layer reduces back to <span class="arithmatex"><span class="MathJax_Preview"> (1, 4, C) = (1, 4, 6) </span><script type="math/tex"> (1, 4, C) = (1, 4, 6) </script></span>.  </li>
+</ol>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/FFNN/Hidden_layer.png" alt="Multi-Head Attention Overview" width="80%">
+</div>
+
+<p>When computing gradients during backpropagation, we go backward through the network, layer by layer, updating weights based on the gradient of the loss function. ReLU helps prevent gradients from vanishing by keeping gradients for positive inputs strong and setting gradients for <strong>inactive neurons (negative inputs) to zero</strong>, ensuring effective optimization. Basically, negative values don't contribute much, and small values lead to very small gradients (which slows learning). </p>
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="44-norm-add-pre-norm"><strong>4.4 Norm &amp; Add (Pre-Norm)</strong></h3>
+<p>After the <strong>Feed-Forward Neural Network (FFNN)</strong> step, the input undergoes the <strong>Norm &amp; Add</strong> process, ensuring stability and efficient gradient flow through the network.</p>
+<hr />
+<p><strong>The output of the FFNN is added back to the input:</strong></p>
+<div class="arithmatex">
+<div class="MathJax_Preview">
+\text{Output}_{\text{final}} = \text{Input} + \text{FFNN Output}
+</div>
+<script type="math/tex; mode=display">
+\text{Output}_{\text{final}} = \text{Input} + \text{FFNN Output}
+</script>
+</div>
+<hr />
+<p>This <strong>Norm &amp; Add</strong> process ensures smooth training by stabilizing activations and maintaining efficient gradient flow.</p>
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="45-full-decoder-block"><strong>4.5. Full Decoder Block:</strong></h3>
+<p>To build the full decoder-only Transformer block, we combine the following components:</p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/Decoder/full_decoder_block.png" alt="Multi-Head Attention Overview" width="50%">
+</div>
+
+<ol>
+<li><strong>Masked Multi-Head Attention</strong>: Captures contextual relationships between tokens while respecting causality.</li>
+<li><strong>Norm and Add</strong>: Applies layer normalization and residual connection to stabilize training.</li>
+<li><strong>Feed-Forward Neural Network (FFNN)</strong>: Introduces non-linear transformations to learn complex patterns.</li>
+<li><strong>Norm and Add</strong>: Another layer normalization and residual connection after the FFNN.</li>
+</ol>
+<p>The <strong>input and output</strong> shapes remain the same (<strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, C)</span><script type="math/tex">(B, T, C)</script></span></strong>), but the model is now trained on sequences of batches, learning to process and generate sequences effectively.</p>
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="5-linear-layer"><strong>5. Linear Layer</strong></h3>
+<p>At the end of the decoder stack, the output is a tensor of shape <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, C)</span><script type="math/tex">(B, T, C)</script></span></strong> This tensor needs to be mapped to logits over the vocabulary, which is achieved using the <strong>Linear Layer</strong>.</p>
+<hr />
+<ul>
+<li>The <strong>Linear Layer</strong> projects the decoder output from shape <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, C)</span><script type="math/tex">(B, T, C)</script></span></strong> to <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, \text{vocab_size})</span><script type="math/tex">(B, T, \text{vocab_size})</script></span></strong>.  </li>
+<li>Each element in the <strong>vocab_size</strong> dimension represents the <strong>raw score (logit)</strong> for a <strong>unique word in the vocabulary</strong>.</li>
+</ul>
+<p>After the <strong>Linear Layer</strong>, the process differs depending on whether the model is in <strong>training</strong> or <strong>inference</strong> mode:  </p>
+<ul>
+<li><strong>During Training</strong>: The logits are used to compute the loss by comparing predicted probabilities with the target labels.  </li>
+<li><strong>During Inference</strong>: The logits are used to generate the next token</li>
+</ul>
+<div style="border-top: 2px solid #00611a; margin: 10px 0;"></div>
+
+<h3 id="example_3"><strong>Example:</strong></h3>
+<ul>
+<li><strong>Input shape:</strong> <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, C) = (2, 4, 6)</span><script type="math/tex">(B, T, C) = (2, 4, 6)</script></span></strong>.  </li>
+<li><strong>Vocabulary size:</strong> <strong><span class="arithmatex"><span class="MathJax_Preview">\text{vocab_size} = 7</span><script type="math/tex">\text{vocab_size} = 7</script></span></strong>.  </li>
+<li><strong>Output shape after the linear layer:</strong> <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, \text{vocab_size}) = (2, 4, 7)</span><script type="math/tex">(B, T, \text{vocab_size}) = (2, 4, 7)</script></span></strong>.</li>
+</ul>
+<p>For a sequence like <code>"dog jumps around cat"</code>, each word in the sequence is mapped to every word in the vocabulary, providing <strong>unnormalized scores (logits)</strong> for all vocabulary words. For example:</p>
+<ul>
+<li>
+<p>First word <code>"dog"</code> produces unnormalized scores for all vocabulary words:</p>
+</li>
+<li>
+<p><strong><span class="arithmatex"><span class="MathJax_Preview">\text{dog, cat}</span><script type="math/tex">\text{dog, cat}</script></span></strong> (logit: 2.3),</p>
+</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">\text{dog, dog}</span><script type="math/tex">\text{dog, dog}</script></span></strong> (logit: 4.1),</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">\text{dog, jumps}</span><script type="math/tex">\text{dog, jumps}</script></span></strong> (logit: 1.8),</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">\text{dog, around}</span><script type="math/tex">\text{dog, around}</script></span></strong> (logit: 3.0),</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">\text{dog, man}</span><script type="math/tex">\text{dog, man}</script></span></strong> (logit: 0.5),</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">\text{dog, is}</span><script type="math/tex">\text{dog, is}</script></span></strong> (logit: -1.2),</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">\text{dog, helping}</span><script type="math/tex">\text{dog, helping}</script></span></strong> (logit: -0.8).  </li>
+</ul>
+<p>These unnormalized scores are the raw output of the final linear layer before applying softmax. This process is repeated for every token in the sequence.</p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/Linear/linear.png" alt="Multi-Head Attention Overview" width="100%">
+</div>
+
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h4 id="6-training-pipeline"><strong>6. Training Pipeline</strong></h4>
+<p>After the <strong>Linear Layer</strong> projects the decoder output to logits of shape <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, \text{vocab_size})</span><script type="math/tex">(B, T, \text{vocab_size})</script></span></strong>, the following steps occur during <em>training</em>*:</p>
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="61-flattening-cross-entropy-loss-backpropagation"><strong>6.1. Flattening, Cross-Entropy Loss, Backpropagation</strong></h3>
+<p><strong>1. Flattening</strong></p>
+<ul>
+<li>The logits are reshaped from <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, \text{vocab_size})</span><script type="math/tex">(B, T, \text{vocab_size})</script></span></strong> to <strong><span class="arithmatex"><span class="MathJax_Preview">(B \cdot T, \text{vocab_size})</span><script type="math/tex">(B \cdot T, \text{vocab_size})</script></span></strong>, creating a 2D matrix suitable for loss computation.  </li>
+<li>The target labels are flattened from <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T)</span><script type="math/tex">(B, T)</script></span></strong> to <strong><span class="arithmatex"><span class="MathJax_Preview">(B \cdot T)</span><script type="math/tex">(B \cdot T)</script></span></strong>, aligning with the logits.</li>
+</ul>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/training/logits.png" alt="Multi-Head Attention Overview" width="100%">
+</div>
+<hr />
+<p><strong>2. Cross-Entropy Loss</strong></p>
+<ul>
+<li>The <strong>Softmax</strong> function is applied to the logits to convert them into probabilities:</li>
+</ul>
+<div class="arithmatex">
+<div class="MathJax_Preview">
+P_i = \frac{\exp(\text{logit}_i)}{\sum_{j=1}^{\text{vocab_size}} \exp(\text{logit}_j)}
+</div>
+<script type="math/tex; mode=display">
+P_i = \frac{\exp(\text{logit}_i)}{\sum_{j=1}^{\text{vocab_size}} \exp(\text{logit}_j)}
+</script>
+</div>
+<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview"> P_i </span><script type="math/tex"> P_i </script></span> is the probability of the <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span>-th token.</li>
+<li><span class="arithmatex"><span class="MathJax_Preview"> \text{logit}_i </span><script type="math/tex"> \text{logit}_i </script></span> is the logit (raw score) for the <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span>-th token.</li>
+<li>The denominator sums the exponentials of all logits across the vocabulary</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> In PyTorch, the <a href="https://pytorch.org/docs/stable/generated/torch.nn.Softmax.html">Cross-Entropy Loss</a> computes the softmax internally</p>
+</blockquote>
+<hr />
+<p>The <strong>Cross-Entropy Loss</strong> is then computed as:
+  $$
+  \text{Loss} = -\frac{1}{N} \sum_{i=1}^N \log P_{\text{target}_i}
+  $$</p>
+<ul>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">N = B \cdot T</span><script type="math/tex">N = B \cdot T</script></span></strong>: Total number of tokens in the batch.</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">P_{\text{target}_i}</span><script type="math/tex">P_{\text{target}_i}</script></span></strong>: Predicted probability of the target token.</li>
+</ul>
+<hr />
+<h3 id="example_4"><strong>Example:</strong></h3>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/training/loss.png" alt="Multi-Head Attention Overview" width="80%">
+</div>
+<hr />
+<p><strong>3. Compute Gradients and Update Weights</strong></p>
+<h3 id="gradient-computation-backpropagation"><strong>Gradient Computation (Backpropagation):</strong></h3>
+<ul>
+<li>During the forward pass, the model computes the loss.</li>
+<li><strong>Backpropagation</strong> calculates the gradients of the loss with respect to the model's weights:
+  $$
+  \text{gradients} = \frac{\partial \text{Loss}}{\partial W}
+  $$</li>
+<li>These gradients show how much each weight contributes to the loss.</li>
+<li>The gradients are stored in the <code>.grad</code> attribute of each weight.</li>
+</ul>
+<hr />
+<h3 id="weight-update-optimizer"><strong>Weight Update (Optimizer):</strong></h3>
+<ul>
+<li>Using the computed gradients, the <strong>optimizer</strong> updates the model's weights.</li>
+<li>The optimizer applies the update rule (e.g., for Adam or SGD):
+  $$
+  W_{\text{new}} = W_{\text{old}} - \eta \cdot \frac{\partial \text{Loss}}{\partial W}
+  $$</li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">W_{\text{new}}</span><script type="math/tex">W_{\text{new}}</script></span></strong>: Updated weight.  </li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">W_{\text{old}}</span><script type="math/tex">W_{\text{old}}</script></span></strong>: Current weight.  </li>
+<li><strong><span class="arithmatex"><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span></strong>: Learning rate.</li>
+</ul>
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h4 id="62-learnable-weights-update"><strong>6.2. Learnable Weights Update</strong></h4>
+<ol>
+<li>
+<p><strong>Embedding Weights</strong>:</p>
+<ul>
+<li><strong>Token Embedding Table</strong>: Maps tokens to embeddings.</li>
+<li><strong>Positional Embedding Table</strong>: Provides positional encodings.</li>
+</ul>
+</li>
+<li>
+<p><strong>Attention Weights</strong>:</p>
+<ul>
+<li><strong>Query, Key, Value Weight Matrices</strong>: <strong><span class="arithmatex"><span class="MathJax_Preview">W_Q, W_K, W_V</span><script type="math/tex">W_Q, W_K, W_V</script></span></strong> for attention computation.</li>
+<li><strong>Final Projection Matrix</strong>: Aggregates multi-head attention outputs.</li>
+</ul>
+</li>
+<li>
+<p><strong>FFNN Weights</strong>:</p>
+<ul>
+<li><strong>First Linear Layer</strong>: Weights <strong><span class="arithmatex"><span class="MathJax_Preview">W_1</span><script type="math/tex">W_1</script></span></strong> and bias <strong><span class="arithmatex"><span class="MathJax_Preview">b_1</span><script type="math/tex">b_1</script></span></strong>.</li>
+<li><strong>Second Linear Layer</strong>: Weights <strong><span class="arithmatex"><span class="MathJax_Preview">W_2</span><script type="math/tex">W_2</script></span></strong> and bias <strong><span class="arithmatex"><span class="MathJax_Preview">b_2</span><script type="math/tex">b_2</script></span></strong>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Layer Normalization Weights</strong>:</p>
+<ul>
+<li>Scaling parameter: <strong><span class="arithmatex"><span class="MathJax_Preview">\gamma</span><script type="math/tex">\gamma</script></span></strong>.</li>
+<li>Shifting parameter: <strong><span class="arithmatex"><span class="MathJax_Preview">\beta</span><script type="math/tex">\beta</script></span></strong>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Linear Layer Weights</strong>:</p>
+<ul>
+<li>Weight matrix and bias used in the final projection to logits.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Note</strong>: The optimizer updates all these weights during the optimization step, using the gradients computed via backpropagation.</p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/training/back_prob.png" alt="Multi-Head Attention Overview" width="50%">
+</div>
+
+<div style="border-top: 2px solid #00611a; margin: 10px 0;"></div>
+
+<hr />
+<h4 id="63-loss-computation-during-training"><strong>6.3. Loss Computation During Training</strong></h4>
+<p>During training, the <strong>loss</strong> is computed for the entire batch by aggregating the errors across all tokens in all sequences within the batch and averaging them. This single loss value represents the overall error for the batch. The loss is then used to update the model's weights through backpropagation, optimizing the network to minimize future errors.</p>
+<p>To monitor performance, the <strong>loss on validation data</strong> is also computed periodically (e.g., after a certain number of iterations). During this step, the model is set to <strong>evaluation mode</strong> (using <code>model.eval()</code>) to ensure that weights are not modified and that behaviors like dropout are disabled. This helps assess how well the model generalizes to unseen data without impacting the training process.</p>
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/training/loop.png" alt="Linear Layer Overview" width="50%">
+</div>
+
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="7-inference-pipeline"><strong>7. Inference Pipeline</strong></h3>
+<p>In <strong>generation mode</strong>, the model predicts one token at a time, iteratively building the output sequence using weights and embeddings learned during training, which allows the model to generate coherent and context-aware text outputs.</p>
+<hr />
+<h4 id="71-input-preparation"><strong>7.1. Input Preparation</strong></h4>
+<ol>
+<li>
+<p><strong>User Input</strong>:The process begins with an input sequence or prompt (e.g., <code>"dog"</code>).</p>
+</li>
+<li>
+<p><strong>Tokenization, Embedding, Positional Encodings</strong>:</p>
+<ul>
+<li>The input is tokenized and mapped to token indices.</li>
+<li>These indices are passed through the <strong>learned embedding matrix</strong> to produce an embedding tensor of shape (B,T,C)</li>
+<li><strong>Positional encodings</strong> (learned during training) are added to the token embeddings.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="72-autoregressive-token-prediction"><strong>7.2. Autoregressive Token Prediction</strong></h4>
+<ol>
+<li>
+<p><strong>Passing Through the Model</strong>:The input tensor <span class="arithmatex"><span class="MathJax_Preview"> (B, T, C) </span><script type="math/tex"> (B, T, C) </script></span> is passed through the model's decoder, using weights and parameters learned during training.</p>
+</li>
+<li>
+<p><strong>Decoder Components</strong>:</p>
+<ul>
+<li><strong>Masked Multi-Head Attention</strong>: Computes attention over past tokens only, ensuring causality.</li>
+<li><strong>Feed-Forward Neural Network (FFNN)</strong>: Applies non-linear transformations to enrich token representations.</li>
+<li><strong>Final Linear Layer</strong>: Maps the decoder output to logits (B,T,vocab_size)</li>
+</ul>
+</li>
+<li>
+<p><strong>Softmax and Token Selection</strong>:</p>
+<ul>
+<li>The logits are passed through a <strong>softmax function</strong> to compute probabilities over the vocabulary.</li>
+<li>The token with the <strong>highest probability</strong> (or sampling) is chosen as the next token.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="73-iterative-process"><strong>7.3. Iterative Process</strong></h4>
+<ol>
+<li><strong>Token Appending</strong>: The newly predicted token is appended to the input sequence, which grows in length: (B,T+1,C)</li>
+<li><strong>Iteration</strong>: the process repeats until a stopping condition is met, such as reaching the maximum number of new tokens.</li>
+</ol>
+<hr />
+<div style="border-top: 2px solid #00611a; margin: 10px 0;"></div>
+
+<h3 id="example-iterative-token-generation"><strong>Example: Iterative Token Generation</strong></h3>
+<ol>
+<li>
+<p><strong>Initial Input</strong>:  </p>
+<ul>
+<li>Start with the input sequence, e.g., <code>"dog"</code> (token at <strong>position 0</strong>).  </li>
+<li>After tokenization and embedding, the input shape is <span class="arithmatex"><span class="MathJax_Preview"> (B=1, T=1, C) </span><script type="math/tex"> (B=1, T=1, C) </script></span>, where <span class="arithmatex"><span class="MathJax_Preview"> C </span><script type="math/tex"> C </script></span> is the embedding dimension.</li>
+</ul>
+</li>
+<li>
+<p><strong>First Iteration</strong>:  </p>
+<ul>
+<li>Pass the input tensor <span class="arithmatex"><span class="MathJax_Preview"> (1, 1, C) </span><script type="math/tex"> (1, 1, C) </script></span> through the model.</li>
+<li>The model generates logits for <strong>position 1</strong> with shape <span class="arithmatex"><span class="MathJax_Preview"> (1, 1, \text{vocab_size}) </span><script type="math/tex"> (1, 1, \text{vocab_size}) </script></span>.</li>
+<li>Apply <strong>softmax</strong> to the logits to compute probabilities over the vocabulary.</li>
+<li>Use <strong>argmax</strong> or a sampling strategy to select the next token, e.g., <strong>"jumps"</strong> (index 1).</li>
+<li><strong>Update</strong>: Append <code>"jumps"</code> to the sequence. The input tensor updates to <span class="arithmatex"><span class="MathJax_Preview"> (1, 2) </span><script type="math/tex"> (1, 2) </script></span>, and then transformed to (1,2,C) when fed to the model. </li>
+</ul>
+</li>
+<li>
+<p><strong>Second Iteration</strong>:  </p>
+<ul>
+<li>Pass the updated sequence (<code>"dog", "jumps"</code>) with shape <span class="arithmatex"><span class="MathJax_Preview"> (1, 2, C) </span><script type="math/tex"> (1, 2, C) </script></span> through the model.</li>
+<li>The model generates logits for <strong>position 2</strong> with shape <span class="arithmatex"><span class="MathJax_Preview"> (1, 2, \text{vocab_size}) </span><script type="math/tex"> (1, 2, \text{vocab_size}) </script></span>.</li>
+<li>Apply <strong>softmax</strong>, then <strong>argmax</strong> to select the next token, e.g., <strong>"around"</strong> (index 3).</li>
+<li><strong>Update</strong>: Append <code>"around"</code> to the sequence. The input tensor updates to <span class="arithmatex"><span class="MathJax_Preview"> (1, 3, C) </span><script type="math/tex"> (1, 3, C) </script></span>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Repeat</strong>:  </p>
+<ul>
+<li>Continue passing the updated sequence through the model, generating logits for the next position, and appending the predicted token.</li>
+<li>The process continues until a stopping criterion is met, such as reaching a predefined sequence length.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<div align="center">
+  <img src="./images/Decoder_Only_Architecture/inference/inference.png" alt="Linear Layer Overview" width="50%">
+</div>
+
+<hr />
+<div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
+
+<h3 id="10-additionals-vanishing-gradients-exploding-gradients-and-regularization-techniques"><strong>10. Additionals: Vanishing Gradients, Exploding Gradients, and Regularization Techniques</strong></h3>
+<p>Gradients, computed during backpropagation, are the derivatives of the loss function with respect to model parameters (weights). They guide how much each parameter should change to minimize the loss. However, gradients can sometimes <strong>vanish</strong> or <strong>explode</strong>, causing training difficulties and poor model performance.</p>
+<ul>
+<li>
+<p><strong>Vanishing Gradients</strong>: Gradients become very small as they propagate backward through the network, especially with activation functions like <strong>sigmoid</strong> or <strong>tanh</strong>. These functions saturate at high or low input values, producing near-zero gradients. Additionally, weights <span class="arithmatex"><span class="MathJax_Preview"> W &lt; 1 </span><script type="math/tex"> W < 1 </script></span> during backpropagation shrink gradients exponentially, causing training to stall.</p>
+</li>
+<li>
+<p><strong>Exploding Gradients</strong>: Conversely, gradients can grow excessively large (<span class="arithmatex"><span class="MathJax_Preview"> W &gt; 1 </span><script type="math/tex"> W > 1 </script></span>), leading to unstable training and erratic weight updates.</p>
+</li>
+</ul>
+<hr />
+<p>To stabilize training and improve gradient flow, several techniques are commonly used:</p>
+<ol>
+<li>
+<p><strong>Weight Initialization</strong>: Proper initialization methods, like <strong>Xavier</strong> or <strong>He initialization</strong>, ensure gradients neither vanish nor explode during forward and backward passes.</p>
+</li>
+<li>
+<p><strong>Activation Functions</strong>: <strong>ReLU</strong> avoids saturation by zeroing out negative values and maintaining constant gradients (<span class="arithmatex"><span class="MathJax_Preview"> f'(x) = 1 </span><script type="math/tex"> f'(x) = 1 </script></span>) for positive values. Variants like <strong>Leaky ReLU</strong> further improve gradient flow.</p>
+</li>
+<li>
+<p><strong>Gradient Clipping</strong>: Limits the magnitude of gradients to a predefined threshold, preventing exploding gradients by capping excessively large values.</p>
+</li>
+<li>
+<p><strong>Normalization Techniques</strong>:  </p>
+</li>
+<li><strong>Layer Normalization</strong> stabilizes gradient flow by standardizing activations, helping to prevent both vanishing and exploding gradients.  </li>
+<li>
+<p><strong>Batch Normalization</strong> reduces internal covariate shift, improving gradient stability.</p>
+</li>
+<li>
+<p><strong>Regularization Techniques</strong>:  </p>
+</li>
+<li><strong>Dropout</strong>: Randomly drops neurons during training, improving robustness and stabilizing gradient reliance.  </li>
+<li><strong>Weight Decay</strong>: Penalizes large weights, mitigating exploding gradients.  </li>
+<li>
+<p><strong>Learning Rate Schedulers</strong>: Gradually reduce the learning rate during training, ensuring smoother weight updates.</p>
+</li>
+<li>
+<p><strong>Optimizers</strong>: Advanced optimizers like <strong>Adam</strong> adapt learning rates for each parameter, stabilizing gradient updates and improving convergence.</p>
+</li>
+</ol>
+<h3 id="8-references"><strong>8. References:</strong></h3>
+<ul>
+<li><a href="https://towardsdatascience.com/transformers-explained-visually-part-2-how-it-works-step-by-step-b49fa4a64f34">Transformers Explained Visually (Part 2): How it works, step-by-step</a></li>
+<li><a href="https://jalammar.github.io/illustrated-gpt2/">The Illustrated GPT-2 (Visualizing Transformer Language Models)</a></li>
+<li><a href="https://cameronrwolfe.substack.com/p/decoder-only-transformers-the-workhorse">Decoder-Only Transformers: The Workhorse of Generative LLMs</a></li>
+<li><a href="https://fleuret.org/dlc/materials/dlc-handout-13-3-transformers.pdf">Deep learning 13.3. Transformer Networks</a></li>
+<li><a href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a></li>
+<li><a href="https://arxiv.org/pdf/1706.03762">Attention Is All You Need</a></li>
+<li><a href="https://medium.com/@jeraldteokj/visualising-loss-calculation-in-large-language-models-1af410a9d73d">How do Large Language Models learn?</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.expand", "toc.integrate", "instant", "search.highlight", "search.suggest"], "search": "assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+        <script src="assets/custom.js"></script>
+      
+        <script src="assets/prevent-right-click.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,15 @@
+# Ignore the docs folder (source files)
+docs/
+
+# Ignore the site folder (build files)
+site/
+
+# Ignore virtual environment (if using one)
+venv/
+
+# Ignore build cache and other temporary files
+.cache/
+*.log
+
+# Ignore macOS system files (if applicable)
+.DS_Store
