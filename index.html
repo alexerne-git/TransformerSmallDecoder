@@ -454,25 +454,7 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#gradient-computation-backpropagation" class="md-nav__link">
-    <span class="md-ellipsis">
-      Gradient Computation (Backpropagation):
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#weight-update-optimizer" class="md-nav__link">
-    <span class="md-ellipsis">
-      Weight Update (Optimizer):
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Weight Update (Optimizer):">
+    <nav class="md-nav" aria-label="Example:">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1141,28 +1123,24 @@ P_i = \frac{\exp(\text{logit}_i)}{\sum_{j=1}^{\text{vocab_size}} \exp(\text{logi
 </div>
 <hr />
 <p><strong>3. Compute Gradients and Update Weights</strong></p>
-<h3 id="gradient-computation-backpropagation"><strong>Gradient Computation (Backpropagation):</strong></h3>
-<ul>
-<li>During the forward pass, the model computes the loss.</li>
-<li><strong>Backpropagation</strong> calculates the gradients of the loss with respect to the model's weights:
+<p><strong>Gradient Computation (Backpropagation):</strong>
+- During the forward pass, the model computes the loss.
+- <strong>Backpropagation</strong> calculates the gradients of the loss with respect to the model's weights:
   $$
   \text{gradients} = \frac{\partial \text{Loss}}{\partial W}
-  $$</li>
-<li>These gradients show how much each weight contributes to the loss.</li>
-<li>The gradients are stored in the <code>.grad</code> attribute of each weight.</li>
-</ul>
+  $$
+  - These gradients show how much each weight contributes to the loss.
+  - The gradients are stored in the <code>.grad</code> attribute of each weight.</p>
 <hr />
-<h3 id="weight-update-optimizer"><strong>Weight Update (Optimizer):</strong></h3>
-<ul>
-<li>Using the computed gradients, the <strong>optimizer</strong> updates the model's weights.</li>
-<li>The optimizer applies the update rule (e.g., for Adam or SGD):
+<p><strong>Weight Update (Optimizer):</strong>
+- Using the computed gradients, the <strong>optimizer</strong> updates the model's weights.
+- The optimizer applies the update rule (e.g., for Adam or SGD):
   $$
   W_{\text{new}} = W_{\text{old}} - \eta \cdot \frac{\partial \text{Loss}}{\partial W}
-  $$</li>
-<li><strong><span class="arithmatex"><span class="MathJax_Preview">W_{\text{new}}</span><script type="math/tex">W_{\text{new}}</script></span></strong>: Updated weight.  </li>
-<li><strong><span class="arithmatex"><span class="MathJax_Preview">W_{\text{old}}</span><script type="math/tex">W_{\text{old}}</script></span></strong>: Current weight.  </li>
-<li><strong><span class="arithmatex"><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span></strong>: Learning rate.</li>
-</ul>
+  $$
+  - <strong><span class="arithmatex"><span class="MathJax_Preview">W_{\text{new}}</span><script type="math/tex">W_{\text{new}}</script></span></strong>: Updated weight.<br />
+  - <strong><span class="arithmatex"><span class="MathJax_Preview">W_{\text{old}}</span><script type="math/tex">W_{\text{old}}</script></span></strong>: Current weight.<br />
+  - <strong><span class="arithmatex"><span class="MathJax_Preview">\eta</span><script type="math/tex">\eta</script></span></strong>: Learning rate.</p>
 <div style="border-top: 2px solid #5ec496; margin: 10px 0;"></div>
 
 <h4 id="62-learnable-weights-update"><strong>6.2. Learnable Weights Update</strong></h4>
@@ -1335,18 +1313,18 @@ P_i = \frac{\exp(\text{logit}_i)}{\sum_{j=1}^{\text{vocab_size}} \exp(\text{logi
 </li>
 <li>
 <p><strong>Normalization Techniques</strong>:  </p>
-</li>
+<ul>
 <li><strong>Layer Normalization</strong> stabilizes gradient flow by standardizing activations, helping to prevent both vanishing and exploding gradients.  </li>
-<li>
-<p><strong>Batch Normalization</strong> reduces internal covariate shift, improving gradient stability.</p>
+<li><strong>Batch Normalization</strong> reduces internal covariate shift, improving gradient stability.</li>
+</ul>
 </li>
 <li>
 <p><strong>Regularization Techniques</strong>:  </p>
-</li>
+<ul>
 <li><strong>Dropout</strong>: Randomly drops neurons during training, improving robustness and stabilizing gradient reliance.  </li>
 <li><strong>Weight Decay</strong>: Penalizes large weights, mitigating exploding gradients.  </li>
-<li>
-<p><strong>Learning Rate Schedulers</strong>: Gradually reduce the learning rate during training, ensuring smoother weight updates.</p>
+<li><strong>Learning Rate Schedulers</strong>: Gradually reduce the learning rate during training, ensuring smoother weight updates.</li>
+</ul>
 </li>
 <li>
 <p><strong>Optimizers</strong>: Advanced optimizers like <strong>Adam</strong> adapt learning rates for each parameter, stabilizing gradient updates and improving convergence.</p>
