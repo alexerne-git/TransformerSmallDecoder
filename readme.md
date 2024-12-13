@@ -1,22 +1,21 @@
 ## **Small Language Model: Decoder Architecture with Shakespeare Dataset**
 
-The goal of this project is to implement a transformer-based, character-level language model (GPT-like) and train it on the Shakespeare dataset. 
-
-
-## **Overview**
-
-The goal is to evaluate the performance of a decoder architecture on character-level tokenized text from Shakespeare's works. Configurations for running the model are provided for both **Google Colab** and a **cluster environment**.
-
-For detailed documentation about the Transformer Decoder Architecture and a step-by-step visual illustration, please check the [Transformer documentation](https://alexerne-git.github.io/TransformerSmallDecoder/).
+The **goal** of this project is to implement a **transformer-based, character-level language model (GPT-like)** and train it on the **Shakespeare dataset**. Configurations for running the model are provided for both **Google Colab** and a **Cluster environment**.
+For detailed documentation about the Transformer Decoder Architecture and a step-by-step visual illustration, please check the [Transformer Decoder documentation](https://alexerne-git.github.io/TransformerSmallDecoder/).
 
 ---
 
-## **Expected Results**
+### **1. Expected Results:**
 
-The model should generate a shakespearean text as shown below:
+The model should generate a Shakespearean text as shown below:
+
+**Input Sequence:**
+```
+O God, O God!
+```
+**Generated Text:**
 
 ```
-Generated Text:
 O God, O God!
 
 GLOUCESTER:
@@ -43,12 +42,14 @@ For I may pay Bolingbroke it at with him.
 
 ```
 
-> Note: When prompting the text and asking ChatGPT the style of the text we got this answer: "This text resembles a pseudo-Shakespearean style, imitating the structure and diction of Elizabethan English but with nonsensical or fabricated language." - close enough considering our GPT has only about 19 million parameters (compared to 175 Billion for GPT-3).
+> **Note:** When prompting the text and asking ChatGPT the style of the text we got this answer: *"This text resembles a pseudo-Shakespearean style, imitating the structure and diction of Elizabethan English but with nonsensical or fabricated language."* - close enough considering our GPT has only about 19 million parameters (compared to 175 Billion for GPT-3).
 
 
+----
+
+### **2. Training, Evaluation, Experiments:**
 
 The best parameters used for the model were the followings:
-
 
 | **Parameter**             | **Value** |
 |----------------------------|-----------|
@@ -62,8 +63,10 @@ The best parameters used for the model were the followings:
 | **Number of layers (n_layer)**| 6        |
 | **Dropout rate**           | 0.2       |
 
+---
 
-**Results at Optimal Point**
+
+**Results at Optimal Point:**
 
 - **Training Loss**: 1.22
 - **Validation Loss**: 1.62
@@ -71,13 +74,17 @@ The best parameters used for the model were the followings:
 - **Training Time (min)**: 18  
 
 
+**Experiments** Detailed results and experiments on different parameters can be found [here](./Documentation/experiments.md).
 
-## **Setup Instructions**
+**Pytorch functions** A Notebook is provided that computes formulas used in the code with simplified examples, to understand how the pytorch functions work, this can be found on [this Notebook](./Documentation/pytorch_notebook.ipynb)
 
-### **Accessing the Code**
+----
 
+### **3. Setup Instructions:**
 
-### **Running on Google Colab**
+Both codes for Google Colab and the Cluster can be found in [this folder](./Code/readme.md)
+
+#### **Running on Google Colab**
 1. Open [this Google Colab notebook](./Code/google_colab_code.ipynb).
 2. Upload the [Shakespeare dataset](./Data/dataset.txt)
 3. Run the cells to install dependencies, train, and evaluate the model.
@@ -85,7 +92,3 @@ The best parameters used for the model were the followings:
 ### **Running on a Cluster**
 1. Follow the instructions in the [Cluster Folder](./Code/Cluster/readme.md)
 ---
-
-### **Experiments** 
-
-Detailed results and experiments on different parameters can be found [here](./Documentation/experiments.md).

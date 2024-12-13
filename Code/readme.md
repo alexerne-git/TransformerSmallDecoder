@@ -1,6 +1,6 @@
 
 
-## Running the code:
+## **Running the code:**
 
 To run the code, you can upload the **google_colab_code.ipynb** onto google colab and run using the GPU, below are the running time for the same parameters used for the experiments (CF readme).
 
@@ -8,7 +8,7 @@ To run the code, you can upload the **google_colab_code.ipynb** onto google cola
 - **Val Train:** 1.57
 - **Val Loss:** 1.73
 - **Training Time:** 10.26
-- **Perplexity:** 6.62 +- 1.3
+- **Perplexity:** 6.62 ± 1.3
 
 | **GPU/CPU**             | **Training Time (minutes)**                   | **GPU RAM** |
 |----------------------------|-----------------------------------|-----------|
@@ -17,11 +17,13 @@ To run the code, you can upload the **google_colab_code.ipynb** onto google cola
 | **L4 GPU**                  | 7.31                                | 4.2/22.5       |
 | **T4 GPU**                  | 14.16                          | 4.4/15 Gb         |
 
-## Code structure for training, validation and test:
+---
+
+## **Code structure for training, validation and test:**
 
 ### 1. **Data Preparation**
 - **Train/Test/Validation Split**: The dataset is split into **80% training**, **10% validation**, and **10% test**.
-- **Character Encoding**: Text is encoded into integers using a character-to-integer mapping, and the dataset is tokenized for training.
+- **Character Encoding**: Text is encoded into integers using a character-to-integer mapping
 
 ```
 train_ratio, val_ratio, test_ratio = 0.8, 0.1, 0.1
@@ -57,8 +59,7 @@ def get_sliding_window_batch(dataset, step_size):
 ### 3. **Evaluation**
 - **Metric - Perplexity**: 
   - The model is evaluated on the test dataset by computing the average loss for non-overlapping windows of `block_size`.
-  - Perplexity is calculated as the exponential of the average loss, representing how well the model predicts the test data (lower perplexity is better).
-
+  - Perplexity is calculated as the exponential of the average loss, representing how well the model predicts the test data
 ```
 window_losses = []
 
@@ -79,7 +80,7 @@ perplexity_std = math.exp(std_test_loss)
 print(f"Test Perplexity: {perplexity:.3f} ± {perplexity_std:.3f}")
 ```
 
-### References for the code (the two references are tutorials)
+### References for the code (Detailed tutorials)
 
 - [Let's build GPT: from scratch, in code, spelled out.](https://www.youtube.com/watch?v=kCc8FmEb1nY)
 - [ Create a Large Language Model from Scratch with Python – Tutorial ](https://www.youtube.com/watch?v=UU1WVnMk4E8&t=8658s)

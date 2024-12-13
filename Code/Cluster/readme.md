@@ -1,8 +1,8 @@
 
-## Running the code on a Cluster
+## **Running the code on a Cluster**
 
 
-## Step 1: Create Project Structure
+### **Step 1: Create Project Structure:**
 
 1. **Set up directories:**
    ```bash
@@ -27,7 +27,7 @@
 
 ---
 
-## Step 2: Verify and Install Libraries
+### **Step 2: Verify and Install Libraries:**
 
 1. **Create a Conda environment:**
    ```bash
@@ -66,7 +66,7 @@
 
 ---
 
-## Step 3: Prepare the Job Submission Script
+### **Step 3: Prepare the Job Submission Script:**
 
 1. **Create and edit `job.sh`:**
    ```bash
@@ -97,7 +97,7 @@
 
 ---
 
-## Step 4: Run the Job
+### **Step 4: Run the Job:**
 
 1. **Submit the job to the cluster:**
    ```bash

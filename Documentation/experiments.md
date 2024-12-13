@@ -1,7 +1,9 @@
 
-## Results and Experiments
+## **Results and Experiments**
 
-The goal of this section is to test out different parameters to find the best parameters for the model, also to see the effect of changing some of them and their effects on train, validation and test results. 
+The goal of this section is to test out different hyper-parameters to find the best parameters for the model. Those experiments also allow to see their effects on train, validation and test results. 
+
+---
 
 ### **Table of Contents**
 
@@ -15,7 +17,7 @@ The goal of this section is to test out different parameters to find the best pa
 
 ### **1. Best Parameters**
 
----
+The best val / train loss were achieved with the following:
 
 
 | **Parameter**             | **Value** |
@@ -31,6 +33,7 @@ The goal of this section is to test out different parameters to find the best pa
 | **Dropout rate**           | 0.2       |
 
 
+
 **Results at Optimal Point**
 
 - **Training Loss**: 1.22
@@ -38,14 +41,18 @@ The goal of this section is to test out different parameters to find the best pa
 - **Perplexity**: 5.52
 - **Training Time (min)**: 18  
 
+
 **Training and Validation Loss Plot**
 
-<img src="./images/results/best_param_model_1400.png" alt="Architecture Overview" width="70%">
+<img src="./images/results/best_param_model_1400.png" alt="Architecture Overview" width="60%">
 
 
 **Output generated text** The rest can be found [here](../Documentation/generated_text.txt)
 
-**Input:** "O God, O God!"
+**Input sequence**
+```
+O God, O God!
+```
 
 **Generated Text:**
 ```
@@ -70,14 +77,14 @@ Let's so return blind him your day to-day.
 
 HASTINGS:
 Good's duke much forth, as I would say take there is.
-
+...
 ```
 ---
 
 
 ### **2. Regularization Techniques**
 
-Using the following changed parameters (maximum iterations = 600), we just add gradient clipping (max_norm=1) and scheduler.
+Using the following changed parameter (maximum iterations = 600), we just add gradient clipping (max_norm=1) and scheduler.
 
 **Training and Validation Loss Plot**
 
@@ -108,10 +115,10 @@ Using the following changed parameters (maximum iterations = 600), we just add g
 
 **Loss (validation and training) plot**
 
-<img src="./images/results/6000_iters.png" alt="Architecture Overview" width="70%">
+<img src="./images/results/6000_iters.png" alt="Architecture Overview" width="60%">
 
 
-The training loss decreases steadily from **4.37** to **0.058**, showing that it fits the training data. However, the validation loss, plateaus around **1.65** before rising to **3.83**, indicating overfitting as the model begins to memorize the training data and fails to generalize. When the validation loss plateaus, it reflects the model's optimal performance for the given setup, and further training risks overfitting. Stopping at this point ensures good results and captures the essential patterns in the data. This is why we added the line that shows the optimal number of eval iterations for our model, set at 1400 iterations. The lowest training loss is 0.05, lowest validation loss 1.65, perplexity 7.08 and training time 5 hours. 
+**Results:** The training loss decreases steadily from **4.37** to **0.058**, showing that it fits the training data. However, the validation loss, plateaus around **1.65** before rising to **3.83**, indicating overfitting as the model begins to memorize the training data and fails to generalize. When the validation loss plateaus, it reflects the model's optimal performance for the given setup, and further training risks overfitting. Stopping at this point ensures good results and captures the essential patterns in the data. This is why we added the line that shows the optimal number of eval iterations for our model, set at 1400 iterations. The lowest training loss is 0.05, lowest validation loss 1.65, perplexity 7.08 and training time 5 hours. 
 
 
 ### **4. Additional Experiments**
@@ -172,18 +179,12 @@ For this experiment, results are the following:
 
 
 **Experiment 2: Batch Size** 
-
 | **Batch Size** | **Training Loss** | **Validation Loss** | **Perplexity** | **Training Time (min)** | **GC / Cluster** |
 |------------------|-------------------|---------------------|---------------|-------------------------|------------------|
-| 128              | 1.36             | 1.61                 | 5.97 ± 1.2    | 9.90                    | Cluster          |
 | 32               | 2.17             | 2.31                 | 9.00 ± 1.7         | 5.78               | Cluster          |
+| 128              | 1.57             | 1.73                 |  6.62 ± 1.3    | 10.26                  | Cluster          |
 
 <img src="./images/results/batch_size.png" alt="Architecture Overview" width="100%">
-
-**Batch Size 128**:
-
-   - Lower training loss (**1.36**) and validation loss (**1.61**) compared to batch size 32
-   - Perplexity is significantly lower (**5.97**), showing better predictive quality.
 
 
 **Batch Size 32**:
@@ -191,10 +192,15 @@ For this experiment, results are the following:
    - Higher training loss (**2.17**) and validation loss (**2.31**) 
    - Perplexity is higher (**9.00**), reflecting reduced predictive performance.
 
-**Conclusion**:
+**Batch Size 128**:
 
-- **Batch Size 128** Better balance between training loss, validation loss, and generalization
+   - Lower training loss (**1.57**) and validation loss (**1.73**) compared to batch size 32
+   - Perplexity is significantly lower (**6.62**), showing better predictive quality.
+
+
+**Conclusion**:
 - **Batch Size 32** Faster but less stable training and generalization
+- **Batch Size 128** Better balance between training loss, validation loss, and generalization
 
 ---
 
@@ -202,13 +208,13 @@ For this experiment, results are the following:
 
 | **Num Layers** | **Training Loss** | **Validation Loss** | **Perplexity** | **Training Time (min)** | **GC / Cluster** |
 |------------------|-------------------|---------------------|---------------|-------------------------|------------------|
-| 6             | 1.36             | 1.61                 | 5.97 ± 1.2    | 9.90                    | Cluster          |
+| 6              | 1.57             | 1.73                 |  6.62 ± 1.3    | 10.26                  | Cluster          |
 | 12              | 1.85             | 2.05                | 7.05  ± 1.1          | 16.36                     | Cluster  |
 
 <img src="./images/results/num_layers.png" alt="Architecture Overview" width="100%">
 
 **6 Layers**:  
-- Training loss: **1.36**, Validation loss: **1.61**, Perplexity: **5.97**.  
+- Training loss: **1.57**, Validation loss: **1.73**, Perplexity: **6.62**.  
 - Better loss and perplexity with shorter training time.
 
 **12 Layers**:  
@@ -229,14 +235,14 @@ This experiment investigates the effect of different dropout rates on model perf
 
 | **Embedding Dim** | **Training Loss** | **Validation Loss** | **Perplexity** | **Training Time (min)** | **GC / Cluster** |
 |------------------|-------------------|---------------------|---------------|-------------------------|------------------|
-| 512             | 1.36             | 1.61                 | 5.97 ± 1.2    | 9.90                    | Cluster          |
+| 512              | 1.57             | 1.73                 |  6.62 ± 1.3    | 10.26                  | Cluster          |
 | 768              | 1.56             | 1.75                | 6.67 ± 1.2     | 18.5                     | Cluster  |
 
 <img src="./images/results/embed_dim.png" alt="Architecture Overview" width="100%">
 
 
 **512 Embed. Size**:  
-- Training loss: **1.36**, Validation loss: **1.61**, Perplexity: **5.97**.  
+- Training loss: **1.57**, Validation loss: **1.73**, Perplexity: **6.62**.  
 - Good balance of performance and training efficiency.
 
 **768 Embed Size**:  
@@ -254,23 +260,23 @@ This experiment investigates the effect of different number of heads on model pe
 
 | **Num Heads** | **Training Loss** | **Validation Loss** | **Perplexity** | **Training Time (min)** | **GC / Cluster** |
 |------------------|-------------------|---------------------|---------------|-------------------------|------------------|
-| 4             | 1.60             | 1.75                 | 6.62 ± 1.2    | 8.90                    | Cluster          |
-| 8              | 1.36             | 1.61                 | 5.97 ± 1.2    | 9.90                    | Cluster          |
+| 4             | 1.60             | 1.75                 | 6.60 ± 1.2    | 8.90                    | Cluster          |
+| 8             | 1.57             | 1.73                 |  6.62 ± 1.3    | 10.26                  | Cluster          |
 
 <img src="./images/results/num_heads.png" alt="Architecture Overview" width="100%">
 
 **4 Heads**:  
-- Training loss: **1.60**, Validation loss: **1.75**, Perplexity: **6.62**.  
+- Training loss: **1.60**, Validation loss: **1.75**, Perplexity: **6.60**.  
 - Slightly higher loss and perplexity compared to 8 heads.
 
 **8 Heads**:  
-- Training loss: **1.36**, Validation loss: **1.61**, Perplexity: **5.97**.  
-- Slightly better loss and perplexity with reduced training time.
+- Training loss: **1.57**, Validation loss: **1.73**, Perplexity: **5.62**.  
+- Slightly better loss and perplexity 
 
 **Conclusion**:  
-- Increasing the number of heads (8) improves performance slightly while reducing training time.  
-- 8 heads provide better generalization and efficiency compared to 4 heads.
+- Increasing the number of heads (8) improves performance slightly.  
 
+--- 
 
 ### **5. Other Experiments**
 
