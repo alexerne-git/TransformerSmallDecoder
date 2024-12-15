@@ -1080,21 +1080,25 @@ Norm(x) = \frac{x - \mathbb{E}[x]}{\sqrt{\text{Var}[x] + \epsilon}} \cdot \gamma
 <h3 id="61-flattening-cross-entropy-loss-backpropagation"><strong>6.1. Flattening, Cross-Entropy Loss, Backpropagation</strong></h3>
 <p><strong>1. Flattening (with Target Shift by 1)</strong></p>
 <ul>
-<li>The logits are reshaped from <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, \text{vocab\_size})</span><script type="math/tex">(B, T, \text{vocab\_size})</script></span></strong> to <strong><span class="arithmatex"><span class="MathJax_Preview">(B \cdot T, \text{vocab\_size})</span><script type="math/tex">(B \cdot T, \text{vocab\_size})</script></span></strong>, creating a 2D matrix suitable for loss computation.  </li>
+<li>The logits are reshaped from <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T, \text{vocab_size})</span><script type="math/tex">(B, T, \text{vocab_size})</script></span></strong> to <strong><span class="arithmatex"><span class="MathJax_Preview">(B \cdot T, \text{vocab_size})</span><script type="math/tex">(B \cdot T, \text{vocab_size})</script></span></strong>, creating a 2D matrix suitable for loss computation.  </li>
 <li>The target labels, shifted by 1 to represent the next token, are flattened from <strong><span class="arithmatex"><span class="MathJax_Preview">(B, T)</span><script type="math/tex">(B, T)</script></span></strong> to <strong><span class="arithmatex"><span class="MathJax_Preview">(B \cdot T)</span><script type="math/tex">(B \cdot T)</script></span></strong>, aligning with the logits.</li>
 </ul>
 <div align="center">
   <img src="./images/Decoder_Only_Architecture/training/logits.png" alt="Multi-Head Attention Overview" width="100%">
 </div>
-
 <hr />
 <p><strong>2. Cross-Entropy Loss</strong></p>
 <ul>
 <li>The <strong>Softmax</strong> function is applied to the logits to convert them into probabilities:</li>
 </ul>
-<p>$$
-  P_i = \frac{\exp(\text{logit}<em>i)}{\sum</em>{j=1}^{\text{vocabsize}} \exp(\text{logit}_j)}
-  $$</p>
+<div class="arithmatex">
+<div class="MathJax_Preview">
+P_i = \frac{\exp(\text{logit}_i)}{\sum_{j=1}^{\text{vocab_size}} \exp(\text{logit}_j)}
+</div>
+<script type="math/tex; mode=display">
+P_i = \frac{\exp(\text{logit}_i)}{\sum_{j=1}^{\text{vocab_size}} \exp(\text{logit}_j)}
+</script>
+</div>
 <ul>
 <li><span class="arithmatex"><span class="MathJax_Preview"> P_i </span><script type="math/tex"> P_i </script></span> is the probability of the <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span>-th token.</li>
 <li><span class="arithmatex"><span class="MathJax_Preview"> \text{logit}_i </span><script type="math/tex"> \text{logit}_i </script></span> is the logit (raw score) for the <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span>-th token.</li>
@@ -1117,7 +1121,6 @@ Norm(x) = \frac{x - \mathbb{E}[x]}{\sqrt{\text{Var}[x] + \epsilon}} \cdot \gamma
 <div align="center">
   <img src="./images/Decoder_Only_Architecture/training/loss.png" alt="Multi-Head Attention Overview" width="80%">
 </div>
-
 <hr />
 <p><strong>3. Compute Gradients and Update Weights</strong></p>
 <p><strong>Gradient Computation (Backpropagation):</strong>
